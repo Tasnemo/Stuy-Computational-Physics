@@ -1,107 +1,70 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Stuy Computational Physics — Live Demos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{--fg:#111;--muted:#666;--bd:#e6e6e6}
-    body{font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:2rem;max-width:1100px;color:var(--fg)}
-    h1{margin:.2rem 0 .4rem} .sub{color:var(--muted);margin:.2rem 0 1rem}
-    .controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
-    input[type=search],select{padding:.6rem .7rem;border:1px solid var(--bd);border-radius:12px;min-width:260px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:1rem}
-    .card{border:1px solid var(--bd);border-radius:12px;padding:14px;background:#fff}
-    .card a{font-weight:600;text-decoration:none}
-    .tag{display:inline-block;background:#f4f4f4;border-radius:999px;padding:2px 8px;margin:6px 6px 0 0;font-size:12px}
-    .empty{color:var(--muted);padding:1rem 0}
-    footer{margin-top:2rem;color:var(--muted)}
-  </style>
-</head>
-<body>
-  <h1>Stuy Computational Physics — Live Demos</h1>
-  <p class="sub">GlowScript/Web VPython exports that run in your browser. No installs.</p>
-
-  <div class="controls">
-    <input id="q" type="search" placeholder="Filter demos (e.g., celestial, euler, chaos, roulette)" />
-    <select id="group">
-      <option value="">All categories</option>
-      <option>Celestial Mechanics</option>
-      <option>Euler–Cromer / Integrators</option>
-      <option>Finite Difference / PDE</option>
-      <option>Chaos / RNG / Logistic</option>
-      <option>Other</option>
-    </select>
-  </div>
-
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" style="display:none">No demos match your filter.</div>
-
-  <footer>
-    Source: <a href="https://github.com/Tasnemo/Stuy-Computational-Physics">GitHub</a> •
-    Tip: enable GitHub Pages (Settings → Pages → “Deploy from a branch”, folder <code>/docs</code>) so this gallery is live.
-  </footer>
-
 <script>
 (async () => {
   const owner = "Tasnemo";
   const repo  = "Stuy-Computational-Physics";
-  const path  = "docs"; // folder we’re listing
-  const api   = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const branch = "main";     // change if your default branch is different
+  const root   = "docs/";    // only list HTMLs under docs/
 
-  const grid  = document.getElementById('grid');
+  const host  = document.getElementById('content');
   const empty = document.getElementById('empty');
   const qIn   = document.getElementById('q');
-  const gIn   = document.getElementById('group');
 
-  // Simple heuristics to tag/group files
-  const categorize = (name) => {
-    const n = name.toLowerCase();
-    if (n.includes('celestial') || n.includes('orbit') || n.includes('nbody')) return ['Celestial Mechanics', ['Gravitation','Orbits']];
-    if (n.includes('euler') || n.includes('verlet') || n.includes('integrator')) return ['Euler–Cromer / Integrators', ['Integrators']];
-    if (n.includes('finite') || n.includes('laplace') || n.includes('heat') || n.includes('diffusion')) return ['Finite Difference / PDE', ['PDE','FD']];
-    if (n.includes('chaos') || n.includes('logistic') || n.includes('rng') || n.includes('roulette')) return ['Chaos / RNG / Logistic', ['Chaos','RNG']];
-    return ['Other', []];
-  };
-
-  const resp = await fetch(api);
-  if (!resp.ok) {
-    grid.innerHTML = `<div class="empty">Couldn’t list /docs via GitHub API (status ${resp.status}). If this is on GitHub Pages, it may be a temporary rate limit—refresh in a bit.</div>`;
+  // 1) Get a recursive tree of the whole branch in ONE request
+  const treeURL = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+  let tree;
+  try {
+    const r = await fetch(treeURL, {headers:{'Accept':'application/vnd.github+json'}});
+    if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+    const data = await r.json();
+    tree = data.tree || [];
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Couldn’t read repo tree (${e.message}). If rate-limited, refresh later.</div>`;
     return;
   }
-  const items = (await resp.json())
-    .filter(x => x.type === 'file' && x.name.toLowerCase().endsWith('.html') && x.name.toLowerCase() !== 'index.html')
-    .map(x => {
-      const [group, tags] = categorize(x.name);
-      return { name: x.name, url: `./${x.name}`, group, tags };
-    })
-    .sort((a,b) => a.name.localeCompare(b.name));
 
-  const render = () => {
-    const q = qIn.value.trim().toLowerCase();
-    const g = gIn.value;
+  // 2) Keep only docs/**/*.html (exclude index.html)
+  const items = tree
+    .filter(t => t.type === 'blob' && t.path.startsWith(root) && t.path.toLowerCase().endsWith('.html'))
+    .filter(t => t.path.toLowerCase() !== root + 'index.html')
+    .map(t => {
+      const rel = t.path.slice(root.length);     // path under docs/
+      const href = './' + rel;                   // link from Pages site
+      const slash = rel.indexOf('/');
+      const group = slash === -1 ? '(root)' : rel.slice(0, slash); // first folder
+      const name  = rel.split('/').pop();
+      return { group, rel, href, name };
+    })
+    .sort((a,b) => (a.group.localeCompare(b.group)) || a.rel.localeCompare(b.rel));
+
+  function render() {
+    const q = (qIn?.value || '').trim().toLowerCase();
     const filtered = items.filter(it => {
-      const text = `${it.name} ${it.group} ${it.tags.join(' ')}`.toLowerCase();
-      const passesQ = q ? text.includes(q) : true;
-      const passesG = g ? it.group === g : true;
-      return passesQ && passesG;
+      const hay = `${it.name} ${it.rel} ${it.group}`.toLowerCase();
+      return q ? hay.includes(q) : true;
     });
 
-    grid.innerHTML = filtered.map(it => `
-      <div class="card">
-        <a href="${it.url}">${it.name.replace(/_/g,' ')}</a>
-        <p class="sub">${it.group}</p>
-        ${it.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-      </div>
-    `).join('');
+    if (!filtered.length) {
+      host.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
 
-    empty.style.display = filtered.length ? 'none' : 'block';
-  };
+    // group by folder
+    const groups = {};
+    for (const it of filtered) (groups[it.group] ||= []).push(it);
 
-  qIn.addEventListener('input', render);
-  gIn.addEventListener('change', render);
+    host.innerHTML = Object.keys(groups).sort().map(g => {
+      const cards = groups[g].map(it => `
+        <div class="card">
+          <a href="${it.href}">${it.name.replace(/_/g,' ')}</a>
+          <div class="path">${it.rel}</div>
+        </div>`).join('');
+      return `<div class="section"><h2>${g}</h2><div class="grid">${cards}</div><div class="divider"></div></div>`;
+    }).join('');
+  }
+
+  if (qIn) qIn.addEventListener('input', render);
   render();
 })();
 </script>
-</body>
-</html>
