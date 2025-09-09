@@ -1,92 +1,43 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Stuy Computational Physics — Live Demos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{--fg:#111;--muted:#666;--bd:#e6e6e6}
-    body{font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:2rem;max-width:1100px;color:var(--fg)}
-    h1{margin:.2rem 0 .4rem}
-    .sub{color:var(--muted);margin:.2rem 0 1rem}
-    .controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
-    input[type=search]{padding:.6rem .7rem;border:1px solid var(--bd);border-radius:12px;min-width:280px}
-    .section{margin:1.5rem 0}
-    .section h2{font-size:1.1rem;margin:.75rem 0}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-    .card{border:1px solid var(--bd);border-radius:12px;padding:14px;background:#fff}
-    .card a{font-weight:600;text-decoration:none}
-    .path{color:var(--muted);font-size:12px;margin:.25rem 0 0}
-    .empty{color:var(--muted);padding:1rem 0}
-    footer{margin-top:2rem;color:var(--muted)}
-    .divider{height:1px;background:#eee;margin:1rem 0}
-  </style>
-</head>
-<body>
-  <h1>Stuy Computational Physics — Live Demos</h1>
-  <p class="sub">GlowScript/Web VPython exports that run in your browser. No installs.</p>
-
-  <div class="controls">
-    <input id="q" type="search" placeholder="Filter by name or folder (e.g., celestial, euler, chaos)" />
-  </div>
-
-  <div id="content"></div>
-  <div id="empty" class="empty" style="display:none">No demos match your filter.</div>
-
-  <footer>
-    Source: <a href="https://github.com/Tasnemo/Stuy-Computational-Physics">GitHub</a> •
-    Pages serves everything under <code>/docs</code>.
-  </footer>
-
 <script>
 (async () => {
   const owner = "Tasnemo";
   const repo  = "Stuy-Computational-Physics";
-  const root  = "docs";
-  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/`;
+  const branch = "main";     // change if your default branch is different
+  const root   = "docs/";    // only list HTMLs under docs/
 
-  const qIn   = document.getElementById('q');
   const host  = document.getElementById('content');
   const empty = document.getElementById('empty');
+  const qIn   = document.getElementById('q');
 
-  async function listRecursive(path) {
-    const url = apiBase + encodeURIComponent(path).replace(/%2F/g,'/');
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error(`GitHub API ${resp.status}`);
-    const entries = await resp.json();
-    const out = [];
-
-    for (const e of entries) {
-      if (e.type === 'dir') {
-        out.push(...await listRecursive(e.path));
-      } else if (e.type === 'file') {
-        const name = e.name.toLowerCase();
-        if (name.endsWith('.html') && name !== 'index.html') {
-          const rel = e.path.substring(root.length + 1); // path under /docs
-          const href = './' + rel;
-          // group = first folder after /docs, or "(root)" if none
-          const slash = rel.indexOf('/');
-          const group = slash === -1 ? '(root)' : rel.slice(0, slash);
-          out.push({ name: e.name, rel, href, group });
-        }
-      }
-    }
-    return out;
-  }
-
-  let items = [];
+  // 1) Get a recursive tree of the whole branch in ONE request
+  const treeURL = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+  let tree;
   try {
-    items = await listRecursive(root);
-  } catch (err) {
-    host.innerHTML = `<div class="empty">Couldn’t read <code>/docs</code> (${err.message}). If rate-limited, refresh later.</div>`;
+    const r = await fetch(treeURL, {headers:{'Accept':'application/vnd.github+json'}});
+    if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+    const data = await r.json();
+    tree = data.tree || [];
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Couldn’t read repo tree (${e.message}). If rate-limited, refresh later.</div>`;
     return;
   }
 
-  // Sort by group then by relative path
-  items.sort((a,b) => (a.group.localeCompare(b.group)) || a.rel.localeCompare(b.rel));
+  // 2) Keep only docs/**/*.html (exclude index.html)
+  const items = tree
+    .filter(t => t.type === 'blob' && t.path.startsWith(root) && t.path.toLowerCase().endsWith('.html'))
+    .filter(t => t.path.toLowerCase() !== root + 'index.html')
+    .map(t => {
+      const rel = t.path.slice(root.length);     // path under docs/
+      const href = './' + rel;                   // link from Pages site
+      const slash = rel.indexOf('/');
+      const group = slash === -1 ? '(root)' : rel.slice(0, slash); // first folder
+      const name  = rel.split('/').pop();
+      return { group, rel, href, name };
+    })
+    .sort((a,b) => (a.group.localeCompare(b.group)) || a.rel.localeCompare(b.rel));
 
   function render() {
-    const q = qIn.value.trim().toLowerCase();
+    const q = (qIn?.value || '').trim().toLowerCase();
     const filtered = items.filter(it => {
       const hay = `${it.name} ${it.rel} ${it.group}`.toLowerCase();
       return q ? hay.includes(q) : true;
@@ -99,35 +50,21 @@
     }
     empty.style.display = 'none';
 
-    // Group by folder name
+    // group by folder
     const groups = {};
-    for (const it of filtered) {
-      (groups[it.group] ||= []).push(it);
-    }
+    for (const it of filtered) (groups[it.group] ||= []).push(it);
 
-    // Build sections
-    const sections = Object.keys(groups).sort().map(g => {
+    host.innerHTML = Object.keys(groups).sort().map(g => {
       const cards = groups[g].map(it => `
         <div class="card">
           <a href="${it.href}">${it.name.replace(/_/g,' ')}</a>
           <div class="path">${it.rel}</div>
-        </div>
-      `).join('');
-      return `
-        <div class="section" data-group="${g}">
-          <h2>${g}</h2>
-          <div class="grid">${cards}</div>
-          <div class="divider"></div>
-        </div>
-      `;
+        </div>`).join('');
+      return `<div class="section"><h2>${g}</h2><div class="grid">${cards}</div><div class="divider"></div></div>`;
     }).join('');
-
-    host.innerHTML = sections;
   }
 
-  qIn.addEventListener('input', render);
+  if (qIn) qIn.addEventListener('input', render);
   render();
 })();
 </script>
-</body>
-</html>
