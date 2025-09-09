@@ -1,0 +1,210 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, G, distys, possys, sun, earth, start_pos, total_angle, last_angle, dunzo, t, dt, maxy, maxx, yback, xback, r_now, r_prev, delta_theta, min_dist, max_dist, peri_index, aphe_index, peri_pos, aphe_pos, peri_vec, aphe_vec, a, c, focus_pos;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    scene = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({width: 600, height: 600})]);
+    "5";
+    G = 6.67e-11;
+    "7";
+    distys = ρσ_list_decorate([]);
+    "8";
+    possys = ρσ_list_decorate([]);
+    "10";
+    sun = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(0, 0, 0), radius: 12e9, texture: "https://i.imgur.com/XdRTvzj.jpeg", shininess: 0, emissive: true, make_trail: true})]);
+    "11";
+    earth = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(15e10, 0, 0), radius: 637e7, texture: textures.earth, make_trail: true})]);
+    "14";
+    start_pos = earth.pos;
+    "15";
+    total_angle = 0;
+    "16";
+    last_angle = 0;
+    "20";
+    sun.mass = 1.9891e30;
+    "21";
+    earth.mass = 5.97e24;
+    "23";
+    sun.velocity = vector(0, 0, 0);
+    "24";
+    earth.velocity = vector(0, 21e3, 0);
+    "26";
+    sun.acc = vector(0, 0, 0);
+    "27";
+    earth.acc = vector(0, 0, 0);
+    "29";
+    async function gravity(star, satellite) {
+        var ρσ_ls, dist, F;
+        "30";
+        dist = star.pos["-"](1["*"](satellite.pos));
+        "32";
+        F = G["*"](star.mass)["*"](satellite.mass)["/"](Math.pow(mag(dist), 2));
+        "33";
+        return F["*"](hat(dist));
+    };
+    if (!gravity.__argnames__) Object.defineProperties(gravity, {
+        __argnames__ : {value: ["star", "satellite"]},
+        __module__ : {value: null}
+    });
+
+    "35";
+    dunzo = true;
+    "37";
+    t = 0;
+    dt = 3600;
+    "38";
+    maxy = 0;
+    "39";
+    maxx = 0;
+    "40";
+    while ((earth.pos["-"](1["*"](sun.pos))).mag[">"](earth.radius["+"](sun.radius)) && dunzo) {
+        "41";
+        (await rate(1e3));
+        "43";
+        earth.acc = (await gravity(sun, earth))["/"](earth.mass);
+        "44";
+        sun.acc = (await gravity(earth, sun))["/"](sun.mass);
+        "46";
+        earth.velocity = earth.velocity["+"](earth.acc["*"](dt));
+        "47";
+        sun.velocity = sun.velocity["+"](sun.acc["*"](dt));
+        "48";
+        yback = earth.pos.y;
+        "49";
+        xback = earth.pos.x;
+        "50";
+        earth.pos = earth.pos["+"](earth.velocity["*"](dt));
+        "51";
+        sun.pos = sun.pos["+"](sun.velocity["*"](dt));
+        "54";
+        r_now = earth.pos["-"](1["*"](sun.pos));
+        "55";
+        r_prev = vector(xback, yback, 0)["-"](1["*"](sun.pos));
+        "57";
+        delta_theta = diff_angle(r_now, r_prev);
+        "58";
+        total_angle=total_angle["+"](delta_theta);
+        "60";
+        if (total_angle[">="](2["*"](pi))) {
+            "61";
+            dunzo = false;
+        }
+        "64";
+        distys.append(abs(mag(earth.pos["-"](1["*"](sun.pos)))));
+        "65";
+        possys.append(earth.pos["-"](1["*"](sun.pos)));
+        "69";
+        t = t["+"](dt);
+    }
+    "71";
+    print(distys);
+    "74";
+    min_dist = min(distys);
+    "75";
+    max_dist = max(distys);
+    "76";
+    peri_index = distys.index(min_dist);
+    "77";
+    aphe_index = distys.index(max_dist);
+    "78";
+    peri_pos = ρσ_getitem(possys, peri_index);
+    "79";
+    aphe_pos = ρσ_getitem(possys, aphe_index);
+    "82";
+    peri_vec = peri_pos["-"](1["*"](sun.pos));
+    "83";
+    ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: sun.pos, axis: .5["*"](peri_vec), color: color.red, shaftwidth: 5e9})]);
+    "84";
+    ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: sun.pos["+"](.5["*"](peri_vec)), text: "Perihelion", height: 2e9, box: false, color: color.red})]);
+    "87";
+    aphe_vec = aphe_pos["-"](1["*"](sun.pos));
+    "88";
+    ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: sun.pos, axis: .5["*"](aphe_vec), color: color.blue, shaftwidth: 5e9})]);
+    "89";
+    ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: sun.pos["+"](.5["*"](aphe_vec)), text: "Aphelion", height: 2e9, box: false, color: color.blue})]);
+    "92";
+    a = min_dist["+"](max_dist)["/"](2);
+    "93";
+    c = abs(max_dist["-"](1["*"](min_dist)))["/"](2);
+    "94";
+    focus_pos = sun.pos["-"](1["*"](norm(peri_pos["-"](1["*"](aphe_pos))))["*"](c));
+    "97";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: focus_pos, radius: 5e9, color: color.yellow})]);
+    "98";
+    ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: focus_pos, text: "Focus", height: 2e9, box: false, color: color.yellow})]);
+    "101";
+    print("Perihelion:", min_dist, "at t =", peri_index["*"](dt), "s");
+    "102";
+    print("Aphelion:", max_dist, "at t =", aphe_index["*"](dt), "s");
+    "103";
+    print("Focus located at:", focus_pos);
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
