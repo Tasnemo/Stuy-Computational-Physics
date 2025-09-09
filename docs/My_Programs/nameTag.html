@@ -1,0 +1,118 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "4";
+    scene.camera.pos = vector(0, 6, 20);
+    "5";
+    scene.camera.axis = vector(0, 1["-u"]()["*"](3), 1["-u"]()["*"](15));
+    "8";
+    ρσ_interpolate_kwargs.call(this, cone, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](8), 5, 0), axis: vector(0, 1["-u"]()["*"](2), 0), radius: .5, length: 3, color: color.red})]);
+    "9";
+    ρσ_interpolate_kwargs.call(this, cone, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](9), 5, 0), axis: vector(2, 0, 0), radius: 1, length: 3, color: color.red})]);
+    "12";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](5.3), 3, 0), axis: vector(.5, 2.5, 0), radius: .2, color: color.green})]);
+    "13";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](4.7), 3, 0), axis: vector(1["-u"]()["*"](.5), 2.5, 0), radius: .2, color: color.green})]);
+    "14";
+    ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](5), 3.8, 0), size: vector(1.2, .2, 1.2), color: color.white})]);
+    "17";
+    ρσ_interpolate_kwargs.call(this, ring, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](2), 5, 0), axis: vector(0, 0, 1), radius: 1, thickness: .3, color: color.blue})]);
+    "18";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](2.5), 5.3, 0), radius: .4, color: color.black})]);
+    "19";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](1.5), 4.7, 0), radius: .4, color: color.black})]);
+    "20";
+    ρσ_interpolate_kwargs.call(this, ring, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](2), 3.5, 0), axis: vector(0, 0, 1), radius: 1, thickness: .3, color: color.blue})]);
+    "21";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](2.5), 3.8, 0), radius: .4, color: color.black})]);
+    "22";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](1.5), 3.2, 0), radius: .4, color: color.black})]);
+    "25";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(1, 3, 0), axis: vector(0, 3, 0), radius: .4, color: color.magenta})]);
+    "26";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(2, 3, 0), axis: vector(0, 3, 0), radius: .4, color: color.magenta})]);
+    "27";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(1, 3, 0), axis: vector(1, 3, 0), radius: .3, color: color.orange})]);
+    "30";
+    ρσ_interpolate_kwargs.call(this, cone, [ρσ_desugar_kwargs({pos: vector(4, 3, 0), axis: vector(0, 2, 0), radius: .5, color: color.yellow})]);
+    "31";
+    ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(4, 5, 0), radius: .3, color: color.white})]);
+    "34";
+    ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: vector(6.5, 3, 0), axis: vector(0, 3, 0), radius: .5, coils: 6, thickness: .2, color: color.cyan})]);
+    "35";
+    ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: vector(8.5, 3, 0), axis: vector(0, 3, 0), radius: .5, coils: 6, thickness: .2, color: color.cyan})]);
+    "36";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(6.5, 6, 0), axis: vector(1, 1["-u"]()["*"](1.5), 0), radius: .3, color: color.magenta})]);
+    "37";
+    ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vector(8.5, 6, 0), axis: vector(1["-u"]()["*"](1), 1["-u"]()["*"](1.5), 0), radius: .3, color: color.magenta})]);
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

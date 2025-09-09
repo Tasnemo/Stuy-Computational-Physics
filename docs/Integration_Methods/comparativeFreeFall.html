@@ -1,0 +1,149 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, init_pos, init_pos2, init_pos3, init_pos4, init_vel, g, platform, ball, ball2, ball3, ball4, hvt, regents, euler, reverse_E, rk2, dt, t, temp_vel;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    init_pos = vector(1["-u"]()["*"](4), 1["-u"]()["*"](3), 0);
+    "4";
+    init_pos2 = vector(4, 1["-u"]()["*"](3), 1["-u"]()["*"](0));
+    "5";
+    init_pos3 = vector(1["-u"]()["*"](2), 1["-u"]()["*"](3), 0);
+    "6";
+    init_pos4 = vector(2, 1["-u"]()["*"](3), 0);
+    "7";
+    init_vel = vector(0, 30, 0);
+    "8";
+    g = vector(0, 1["-u"]()["*"](9.81), 0);
+    "10";
+    platform = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(0, 1["-u"]()["*"](4.5), 0), size: vec(15, 1, 10)})]);
+    "13";
+    ball = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: init_pos, color: color.cyan, make_trail: true})]);
+    "14";
+    ball.vel = init_vel;
+    "16";
+    ball2 = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: init_pos2, color: color.orange, make_trail: true})]);
+    "17";
+    ball2.vel = init_vel;
+    "19";
+    ball3 = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: init_pos3, color: color.red, make_trail: true})]);
+    "20";
+    ball3.vel = init_vel;
+    "22";
+    ball4 = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: init_pos4, color: color.blue, make_trail: true})]);
+    "23";
+    ball4.vel = init_vel;
+    "25";
+    hvt = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Height vs Time", xtitle: "Time", ytitle: "Height", fast: false})]);
+    "26";
+    regents = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: hvt, color: color.orange})]);
+    "27";
+    euler = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: hvt, color: color.cyan})]);
+    "28";
+    reverse_E = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: hvt, color: color.red})]);
+    "29";
+    rk2 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: hvt, color: color.blue})]);
+    "31";
+    dt = .1;
+    "32";
+    t = 0;
+    "33";
+    while (t["<"](6)) {
+        "34";
+        (await rate(1["/"](dt)));
+        "35";
+        euler.plot(t, ball.pos.y);
+        "36";
+        ball.vel=ball.vel["+"](g["*"](dt));
+        "37";
+        ball.pos=ball.pos["+"](ball.vel["*"](dt));
+        "41";
+        ball2.pos = init_vel["*"](t)["+"](.5["*"](g)["*"](Math.pow(t, 2)))["+"](init_pos2);
+        "42";
+        regents.plot(t, ball2.pos.y);
+        "44";
+        reverse_E.plot(t, ball3.pos.y);
+        "45";
+        ball3.pos=ball3.pos["+"](ball3.vel["*"](dt));
+        "46";
+        ball3.vel=ball3.vel["+"](g["*"](dt));
+        "49";
+        rk2.plot(t, ball4.pos.y);
+        "50";
+        temp_vel = ball4.vel["+"](g["*"](dt));
+        "52";
+        ball4.pos=ball4.pos["+"](ball4.vel["+"](temp_vel)["/"](2)["*"](dt));
+        "53";
+        ball4.vel = temp_vel;
+        "55";
+        t=t["+"](dt);
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

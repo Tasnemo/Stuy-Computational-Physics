@@ -1,0 +1,153 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var cylItems;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, N, lengtho, maxT, minT, cylItems, dx, dt, cylitem, i, label1, label2, step;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "2";
+    N = 100;
+    "3";
+    lengtho = 4;
+    "4";
+    maxT = 50;
+    "5";
+    minT = 5;
+    "6";
+    cylItems = ρσ_list_decorate([]);
+    "7";
+    dx = lengtho["/"](N);
+    "9";
+    dt = Math.pow(dx, 2)["/"](4);
+    "10";
+    async function coloring(item) {
+        "11";
+        item.color = vec(item.T["-"](1["*"](minT))["/"](maxT["-"](1["*"](minT))), 0, 1["-"](1["*"](item.T["-"](1["*"](20)))["/"](50["-"](1["*"](20)))));
+    };
+    if (!coloring.__argnames__) Object.defineProperties(coloring, {
+        __argnames__ : {value: ["item"]},
+        __module__ : {value: null}
+    });
+
+    "13";
+    async function newTemp(itemI) {
+        var ρσ_ls, d2T;
+        "14";
+        "15";
+        if ((itemI !== 0 && (typeof itemI !== "object" || ρσ_not_equals(itemI, 0))) && ρσ_not_equals(itemI, N["-"](1["*"](1)))) {
+            "16";
+            d2T = ρσ_getitem(cylItems, itemI["+"](1)).T["+"](ρσ_getitem(cylItems, itemI["-"](1["*"](1))).T)["-"](1["*"](2)["*"](ρσ_getitem(cylItems, itemI).T))["/"](Math.pow(dx, 2));
+            "17";
+            ρσ_getitem(cylItems, itemI).T=ρσ_getitem(cylItems, itemI).T["+"](dt["*"](d2T));
+        }
+    };
+    if (!newTemp.__argnames__) Object.defineProperties(newTemp, {
+        __argnames__ : {value: ["itemI"]},
+        __module__ : {value: null}
+    });
+
+    "22";
+    for (var ρσ_Index1 = 0; ρσ_Index1["<"](N); ρσ_Index1++) {
+        i = ρσ_Index1;
+        "23";
+        cylitem = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({T: 20, pos: vec(1["-u"]()["*"](2)["+"](dx["*"](i)), 0, 0), length: dx, radius: .2})]);
+        "24";
+        (await coloring(cylitem));
+        "25";
+        cylItems.append(cylitem);
+    }
+    "27";
+    label1 = ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: ρσ_getitem(cylItems, int(N["/"](3))).pos, text: ρσ_getitem(cylItems, int(N["/"](3))).T, yoffset: 40, xoffset: 1["-u"]()["*"](20)})]);
+    "28";
+    label2 = ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: ρσ_getitem(cylItems, int(2["*"](N)["/"](3))).pos, text: ρσ_getitem(cylItems, int(2["*"](N)["/"](3))).T, yoffset: 40, xoffset: 20})]);
+    "29";
+    while (true) {
+        "30";
+        (await rate(1e3));
+        "31";
+        ρσ_getitem(cylItems, 0).T = 50;
+        "32";
+        ρσ_getitem(cylItems, N["-"](1["*"](1))).T = 5;
+        "33";
+        for (var ρσ_Index2 = 0; ρσ_Index2["<"](N); ρσ_Index2++) {
+            step = ρσ_Index2;
+            "34";
+            (await newTemp(step));
+            "35";
+            (await coloring(ρσ_getitem(cylItems, step)));
+            "36";
+            label1.text = round(ρσ_getitem(cylItems, int(N["/"](3))).T, 1);
+            "37";
+            label2.text = round(ρσ_getitem(cylItems, int(2["*"](N)["/"](3))).T, 1);
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
