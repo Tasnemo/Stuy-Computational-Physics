@@ -1,0 +1,124 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function input(arg) {
+    	arg = arg || {}
+    	if (arg.prompt !== undefined && arg.prompt != '') return prompt(arg.prompt)
+    	else if (typeof arg === 'string') return prompt(arg)
+    	else return prompt()
+    }
+
+    var version, print, arange, __name__, type, ρσ_ls, seed, r, N, X, popit, Curvy, Dotty, i;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    async function logistic(X, r) {
+        "4";
+        return r["*"](X)["*"](1["-"](1["*"](X)));
+    };
+    if (!logistic.__argnames__) Object.defineProperties(logistic, {
+        __argnames__ : {value: ["X", "r"]},
+        __module__ : {value: null}
+    });
+
+    (await sleep(.1));
+    "6";
+    seed = float(ρσ_interpolate_kwargs.call(this, input, [ρσ_desugar_kwargs({prompt: "starting x:"})]));
+    (await sleep(.1));
+    "7";
+    r = float(ρσ_interpolate_kwargs.call(this, input, [ρσ_desugar_kwargs({prompt: "growth rate:"})]));
+    (await sleep(.1));
+    "8";
+    N = int(ρσ_interpolate_kwargs.call(this, input, [ρσ_desugar_kwargs({prompt: "Amount of interations:"})]));
+    "10";
+    X = ρσ_list_decorate([]);
+    "11";
+    ρσ_setitem(X, 0, seed);
+    "13";
+    popit = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "pop fraction vs iterate number", xtitle: "iterate", ytitle: "population fraction", fast: false})]);
+    "15";
+    Curvy = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: popit})]);
+    "16";
+    Dotty = ρσ_interpolate_kwargs.call(this, gdots, [ρσ_desugar_kwargs({graph: popit})]);
+    "18";
+    Curvy.plot(0, ρσ_getitem(X, 0));
+    "19";
+    Dotty.plot(0, ρσ_getitem(X, 0));
+    "21";
+    for (var ρσ_Index1 = 1; ρσ_Index1["<"](N["+"](1)); ρσ_Index1++) {
+        i = ρσ_Index1;
+        "22";
+        ρσ_setitem(X, i, (await logistic(ρσ_getitem(X, i["-"](1["*"](1))), r)));
+        "23";
+        Curvy.plot(i, ρσ_getitem(X, i));
+        "24";
+        Dotty.plot(i, ρσ_getitem(X, i));
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
