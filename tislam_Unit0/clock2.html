@@ -1,0 +1,258 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var current_minutes, current_hours, full_rotations, dragging, prev_angle, wound;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, wound, dragging, big_rad, little_rad, micro_rad, minute_hand, hour_hand, current_hours, current_minutes, prev_angle, full_rotations, outer_x, outer_y, inner_x, inner_y, i, t, dt, minute_angle, hour_angle;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "4";
+    scene.title = "Wind Your Own Clock\nClick to wind the minute hand manually to set the time and click to let go :)";
+    "5";
+    scene.append_to_title("\nEach full revolution moves the hour hand");
+    "8";
+    wound = false;
+    "9";
+    dragging = false;
+    "12";
+    big_rad = 3.1;
+    "13";
+    little_rad = 2.6;
+    "14";
+    micro_rad = 2.8;
+    "17";
+    minute_hand = ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, .1), axis: vec(0, little_rad["-"](1["*"](.2)), .1), color: color.blue})]);
+    "18";
+    hour_hand = ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, 1["-u"]()["*"](.1)), axis: vec(0, little_rad["-"](1["*"](.5)), 1["-u"]()["*"](.1)), color: color.green})]);
+    "21";
+    current_hours = 0;
+    "22";
+    current_minutes = 0;
+    "23";
+    prev_angle = 0;
+    "24";
+    full_rotations = 0;
+    "27";
+    async function change_minutes(new_minutes) {
+        var ρσ_ls, previous_minutes, minute_angle, hour_angle;
+        "28";
+        "30";
+        previous_minutes = current_minutes;
+        "31";
+        current_minutes = new_minutes["%"](60);
+        "33";
+        if (previous_minutes[">"](50) && current_minutes["<"](10)) {
+            "34";
+            current_hours = current_hours["+"](1)["%"](12);
+            "35";
+            full_rotations=full_rotations["+"](1);
+            "36";
+        } else if (previous_minutes["<"](10) && current_minutes[">"](50)) {
+            "37";
+            current_hours = current_hours["-"](1["*"](1))["%"](12);
+            "38";
+            full_rotations=full_rotations["-"](1);
+        }
+        "41";
+        minute_angle = 1["-u"]()["*"](current_minutes)["*"](pi["/"](30))["+"](pi["/"](2));
+        "42";
+        minute_hand.axis = vec(little_rad["*"](cos(minute_angle)), little_rad["*"](sin(minute_angle)), .1);
+        "45";
+        hour_angle = 1["-u"]()["*"](current_hours["%"](12)["*"](pi["/"](6))["+"](current_minutes["/"](60)["*"](pi["/"](6))))["+"](pi["/"](2));
+        "46";
+        hour_hand.axis = vec(little_rad["*"](cos(hour_angle)), little_rad["*"](sin(hour_angle)), 1["-u"]()["*"](.1));
+    };
+    if (!change_minutes.__argnames__) Object.defineProperties(change_minutes, {
+        __argnames__ : {value: ["new_minutes"]},
+        __module__ : {value: null}
+    });
+
+    "49";
+    async function drag() {
+        var ρσ_ls, mouse_pos;
+        "50";
+        "51";
+        dragging = !dragging;
+        "52";
+        if (dragging) {
+            "53";
+            mouse_pos = scene.mouse.pos;
+            "54";
+            prev_angle = atan2(1["-u"]()["*"](mouse_pos.y), 1["-u"]()["*"](mouse_pos.x));
+        }
+    };
+    if (!drag.__module__) Object.defineProperties(drag, {
+        __module__ : {value: null}
+    });
+
+    "55";
+    scene.bind("click", drag);
+    "58";
+    async function update_minute_hand() {
+        var ρσ_ls, mouse_pos, angle, new_minutes;
+        "59";
+        "61";
+        if (dragging) {
+            "62";
+            mouse_pos = scene.mouse.pos;
+            "63";
+            angle = atan2(1["-u"]()["*"](mouse_pos.x), 1["-u"]()["*"](mouse_pos.y));
+            "66";
+            new_minutes = round(180["+"]((await degrees(angle)))["/"](6))["%"](60);
+            "69";
+            (await change_minutes(new_minutes));
+            "71";
+            prev_angle = angle;
+        }
+    };
+    if (!update_minute_hand.__module__) Object.defineProperties(update_minute_hand, {
+        __module__ : {value: null}
+    });
+
+    "74";
+    for (var ρσ_Index1 = 0; ρσ_Index1["<"](12); ρσ_Index1++) {
+        i = ρσ_Index1;
+        "75";
+        outer_x = big_rad["*"](cos(pi["*"](i)["/"](6)));
+        "76";
+        outer_y = big_rad["*"](sin(pi["*"](i)["/"](6)));
+        "77";
+        if (ρσ_equals(i["%"](3), 0)) {
+            "78";
+            inner_x = little_rad["*"](cos(pi["*"](i)["/"](6)));
+            "79";
+            inner_y = little_rad["*"](sin(pi["*"](i)["/"](6)));
+            "80";
+        } else {
+            "81";
+            inner_x = micro_rad["*"](cos(pi["*"](i)["/"](6)));
+            "82";
+            inner_y = micro_rad["*"](sin(pi["*"](i)["/"](6)));
+        }
+        "83";
+        ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ vec(outer_x, outer_y, 0), vec(inner_x, inner_y, 0) ]), radius: .05, color: color.yellow})]);
+    }
+    "86";
+    async function setRun(b) {
+        "87";
+        "88";
+        wound = !wound;
+        "89";
+        if (wound) {
+            "90";
+            b.text = "Click to pause.";
+            "91";
+        } else {
+            "92";
+            b.text = "Click to run.";
+        }
+    };
+    if (!setRun.__argnames__) Object.defineProperties(setRun, {
+        __argnames__ : {value: ["b"]},
+        __module__ : {value: null}
+    });
+
+    "95";
+    ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: setRun, text: "Click to wind the clock."})]);
+    "98";
+    t = 0;
+    "99";
+    dt = .025;
+    "102";
+    while (true) {
+        "103";
+        (await rate(60));
+        "105";
+        (await update_minute_hand());
+        "107";
+        if (wound) {
+            "108";
+            t=t["+"](dt);
+            "109";
+            current_minutes=current_minutes["+"](dt);
+            "111";
+            if (current_minutes[">="](60)) {
+                "112";
+                current_minutes = 0;
+                "113";
+                current_hours = current_hours["+"](1)["%"](12);
+            }
+            "116";
+            minute_angle = 1["-u"]()["*"](current_minutes)["*"](pi["/"](30))["+"](pi["/"](2));
+            "117";
+            minute_hand.axis = vec(little_rad["*"](cos(minute_angle)), little_rad["*"](sin(minute_angle)), .1);
+            "120";
+            hour_angle = 1["-u"]()["*"](current_hours["%"](12)["*"](pi["/"](6))["+"](current_minutes["/"](60)["*"](pi["/"](6))))["+"](pi["/"](2));
+            "121";
+            hour_hand.axis = vec(little_rad["*"](cos(hour_angle)), little_rad["*"](sin(hour_angle)), 1["-u"]()["*"](.1));
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

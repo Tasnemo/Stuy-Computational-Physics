@@ -1,0 +1,1005 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var isolation_mode, isolation_values, isolation_index, volume, heat, avgVelocity, objects, spawn_quantity, collisioncount, gauge, needle, data_plot, smoothed_pressure, timer, pressure;
+ρσ_modules.pythonize = {};
+ρσ_modules.random = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+
+(function(){
+    var ρσ_seed_state, ρσ_get_random_byte;
+    ρσ_seed_state = (function(){
+        var ρσ_d = {};
+        ρσ_d["key"] = ρσ_list_decorate([]);
+        ρσ_d["key_i"] = 0;
+        ρσ_d["key_j"] = 0;
+        return ρσ_d;
+    }).call(this);
+    ρσ_get_random_byte = (function() {
+        var ρσ_anonfunc = function () {
+            var ρσ_unpack;
+            ρσ_seed_state.key_i = (ρσ_seed_state.key_i + 1) % 256;
+            ρσ_seed_state.key_j = (ρσ_seed_state.key_j + (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)]) % 256;
+            ρσ_unpack = [(ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)], 
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)]];
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)] = ρσ_unpack[0];
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)] = ρσ_unpack[1];
+            return (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(((ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)] + (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)]) % 256, ρσ_expr_temp)];
+        };
+        if (!ρσ_anonfunc.__module__) Object.defineProperties(ρσ_anonfunc, {
+            __module__ : {value: "random"}
+        });
+        return ρσ_anonfunc;
+    })();
+    function seed() {
+        var x = (arguments[0] === undefined || ( 0 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true)) ? seed.__defaults__.x : arguments[0];
+        var ρσ_kwargs_obj = arguments[arguments.length-1];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "x")){
+            x = ρσ_kwargs_obj.x;
+        }
+        var i, j, ρσ_unpack;
+        ρσ_seed_state.key_i = ρσ_seed_state.key_j = 0;
+        if (typeof x === "number") {
+            x = x.toString();
+        } else if (typeof x !== "string") {
+            throw new TypeError("unhashable type: '" + typeof x + "'");
+        }
+        for (var ρσ_Index1 = 0; ρσ_Index1 < 256; ρσ_Index1++) {
+            i = ρσ_Index1;
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] = i;
+        }
+        j = 0;
+        for (var ρσ_Index2 = 0; ρσ_Index2 < 256; ρσ_Index2++) {
+            i = ρσ_Index2;
+            j = (j + (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] + x.charCodeAt(i % x.length)) % 256;
+            ρσ_unpack = [(ρσ_expr_temp = ρσ_seed_state.key)[(typeof j === "number" && j < 0) ? ρσ_expr_temp.length + j : j], 
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i]];
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] = ρσ_unpack[0];
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof j === "number" && j < 0) ? ρσ_expr_temp.length + j : j] = ρσ_unpack[1];
+        }
+    };
+    if (!seed.__defaults__) Object.defineProperties(seed, {
+        __defaults__ : {value: {x:(new Date).getTime()}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["x"]},
+        __module__ : {value: "random"}
+    });
+
+    seed();
+    function random() {
+        var n, m, i;
+        n = 0;
+        m = 1;
+        for (var ρσ_Index3 = 0; ρσ_Index3 < 8; ρσ_Index3++) {
+            i = ρσ_Index3;
+            n += ρσ_get_random_byte() * m;
+            m *= 256;
+        }
+        return n / 0x10000000000000000;
+    };
+    if (!random.__module__) Object.defineProperties(random, {
+        __module__ : {value: "random"}
+    });
+
+    function randrange() {
+        var start, stop, step, width, n;
+        if (arguments.length === 1) {
+            return randbelow(int(arguments[0]));
+        }
+        start = int(arguments[0]);
+        stop = int(arguments[1]);
+        if (arguments.length < 3) {
+            step = 1;
+        } else {
+            step = int(arguments[2]);
+        }
+        width = stop - start;
+        if (step === 1) {
+            if (width > 0) {
+                return start + randbelow(width);
+            }
+            throw new ValueError("empty range for randrange()");
+        }
+        if (step > 0) {
+            n = Math.floor((width + step - 1) / step);
+        } else if (step < 0) {
+            n = Math.floor((width + step + 1) / step);
+        } else {
+            throw new ValueError("zero step for randrange()");
+        }
+        if (n <= 0) {
+            throw new ValueError("empty range in randrange(" + ρσ_str.format("{}", start) + ", " + ρσ_str.format("{}", stop) + ", " + ρσ_str.format("{}", step) + ")");
+        }
+        return start + step * randbelow(n);
+    };
+    if (!randrange.__module__) Object.defineProperties(randrange, {
+        __module__ : {value: "random"}
+    });
+
+    function randint(a, b) {
+        return int(random() * (b - a + 1) + a);
+    };
+    if (!randint.__argnames__) Object.defineProperties(randint, {
+        __argnames__ : {value: ["a", "b"]},
+        __module__ : {value: "random"}
+    });
+
+    function uniform(a, b) {
+        return random() * (b - a) + a;
+    };
+    if (!uniform.__argnames__) Object.defineProperties(uniform, {
+        __argnames__ : {value: ["a", "b"]},
+        __module__ : {value: "random"}
+    });
+
+    function randbelow(n) {
+        return Math.floor(random() * n);
+    };
+    if (!randbelow.__argnames__) Object.defineProperties(randbelow, {
+        __argnames__ : {value: ["n"]},
+        __module__ : {value: "random"}
+    });
+
+    function choice(seq) {
+        if (seq.length > 0) {
+            return seq[ρσ_bound_index(randbelow(seq.length), seq)];
+        } else {
+            throw new IndexError;
+        }
+    };
+    if (!choice.__argnames__) Object.defineProperties(choice, {
+        __argnames__ : {value: ["seq"]},
+        __module__ : {value: "random"}
+    });
+
+    function shuffle() {
+        var x = ( 0 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true) ? undefined : arguments[0];
+        var random_f = (arguments[1] === undefined || ( 1 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true)) ? shuffle.__defaults__.random_f : arguments[1];
+        var ρσ_kwargs_obj = arguments[arguments.length-1];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "random_f")){
+            random_f = ρσ_kwargs_obj.random_f;
+        }
+        var j, ρσ_unpack, i;
+        for (var ρσ_Index4 = 0; ρσ_Index4 < x.length; ρσ_Index4++) {
+            i = ρσ_Index4;
+            j = Math.floor(random_f() * (i + 1));
+            ρσ_unpack = [x[(typeof j === "number" && j < 0) ? x.length + j : j], x[(typeof i === "number" && i < 0) ? x.length + i : i]];
+            x[(typeof i === "number" && i < 0) ? x.length + i : i] = ρσ_unpack[0];
+            x[(typeof j === "number" && j < 0) ? x.length + j : j] = ρσ_unpack[1];
+        }
+        return x;
+    };
+    if (!shuffle.__defaults__) Object.defineProperties(shuffle, {
+        __defaults__ : {value: {random_f:random}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["x", "random_f"]},
+        __module__ : {value: "random"}
+    });
+
+    function sample(population, k) {
+        var x, j, ρσ_unpack, i;
+        x = population.slice();
+        for (var ρσ_Index5 = population.length - 1; ρσ_Index5 > population.length - k - 1; ρσ_Index5-=1) {
+            i = ρσ_Index5;
+            j = Math.floor(random() * (i + 1));
+            ρσ_unpack = [x[(typeof j === "number" && j < 0) ? x.length + j : j], x[(typeof i === "number" && i < 0) ? x.length + i : i]];
+            x[(typeof i === "number" && i < 0) ? x.length + i : i] = ρσ_unpack[0];
+            x[(typeof j === "number" && j < 0) ? x.length + j : j] = ρσ_unpack[1];
+        }
+        return x.slice(population.length - k);
+    };
+    if (!sample.__argnames__) Object.defineProperties(sample, {
+        __argnames__ : {value: ["population", "k"]},
+        __module__ : {value: "random"}
+    });
+
+    ρσ_modules.random.ρσ_seed_state = ρσ_seed_state;
+    ρσ_modules.random.ρσ_get_random_byte = ρσ_get_random_byte;
+    ρσ_modules.random.seed = seed;
+    ρσ_modules.random.random = random;
+    ρσ_modules.random.randrange = randrange;
+    ρσ_modules.random.randint = randint;
+    ρσ_modules.random.uniform = uniform;
+    ρσ_modules.random.randbelow = randbelow;
+    ρσ_modules.random.choice = choice;
+    ρσ_modules.random.shuffle = shuffle;
+    ρσ_modules.random.sample = sample;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, collisioncount, volume, heat, displayvolume, r, piston, volSlider, heatSlider, isolation_menu, data_plot, pressure_plot, x_axis_label, objects, spawn_quantity, particle_count, set_spawn_menu, spawn, clear, gauge, needle, lab, isolation_mode, isolation_index, isolation_values, i, timer, dt, raw_pressure_interval, smoothed_pressure, alpha, raw_pressure, pres;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    var random = ρσ_modules.random;
+
+    "25";
+    scene = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({background: vec(.8, .9, 1)})]);
+    "26";
+    scene.userzoom = true;
+    "27";
+    scene.userspin = false;
+    "28";
+    scene.userpan = false;
+    "31";
+    collisioncount = 0;
+    "32";
+    volume = 1e3;
+    "33";
+    heat = 2;
+    "35";
+    scene.append_to_caption("\n Volume = ");
+    "36";
+    displayvolume = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: volume})]);
+    "37";
+    scene.append_to_caption(" meters ^3\n");
+    "43";
+    r = (await findr(volume));
+    "45";
+    piston = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vec(0, 1["-u"]()["*"](1.5)["*"](r), 0), axis: vec(0, 2.5["*"](r), 0), radius: r, color: color.white, opacity: .4, emmisive: true})]);
+    "47";
+    volSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: setVolume, min: 1e3, max: 2e5, value: volume, step: 1, length: 300, width: 13, left: 5, top: 10, bottom: 10})]);
+    "49";
+    scene.append_to_caption("\nHeat\n");
+    "51";
+    heatSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: setHeat, min: .001, max: 6, value: 2, step: .05, length: 300, width: 13, left: 5, top: 10, bottom: 10})]);
+    "53";
+    scene.append_to_caption("\n\nIsolation Mode: ");
+    "54";
+    async function update_isolation_choice() {
+        var ρσ_ls, selected;
+        "55";
+        "56";
+        selected = isolation_menu.selected;
+        "57";
+        if ((selected === "None" || typeof selected === "object" && ρσ_equals(selected, "None"))) {
+            "58";
+            pressure_plot.remove();
+            "59";
+            data_plot.xtitle = "No Var";
+            "60";
+            isolation_mode = "None";
+            "61";
+            (await set_ui_enabled(true));
+        }
+    };
+    if (!update_isolation_choice.__module__) Object.defineProperties(update_isolation_choice, {
+        __module__ : {value: null}
+    });
+
+    "63";
+    isolation_menu = ρσ_interpolate_kwargs.call(this, menu, [ρσ_desugar_kwargs({bind: update_isolation_choice, choices: ρσ_list_decorate([ "None", "Isolate Volume", "Isolate Temperature", "Isolate Particles" ])})]);
+    "65";
+    data_plot = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({xtitle: "coolio", ytitle: "Pressure", title: "Isolation Graph"})]);
+    "66";
+    pressure_plot = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.red, graph: data_plot})]);
+    "67";
+    x_axis_label = "";
+    "70";
+    async function begin_isolation() {
+        var ρσ_ls, x_axis_label, x;
+        "71";
+        "72";
+        isolation_mode = isolation_menu.selected;
+        "73";
+        isolation_index = 0;
+        "74";
+        pressure_plot.remove();
+        "75";
+        (await set_ui_enabled(false));
+        "77";
+        if ((isolation_mode === "Isolate Volume" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Volume"))) {
+            "78";
+            isolation_values = list(range(1e3, 10001, 250));
+            "79";
+            x_axis_label = "Volume (m^3)";
+            "80";
+        } else if ((isolation_mode === "Isolate Temperature" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Temperature"))) {
+            "81";
+            isolation_values = (function() {
+                var ρσ_Iter = range(0, 61, 2), ρσ_Result = [], x;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    x = ρσ_Index;
+                    ρσ_Result.push(round(x["*"](.1), 1));
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })();
+            "82";
+            x_axis_label = "Temperature (T)";
+            "83";
+        } else if ((isolation_mode === "Isolate Particles" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Particles"))) {
+            "84";
+            isolation_values = list(range(0, 201, 10));
+            "85";
+            x_axis_label = "Particle Count";
+            "86";
+        } else {
+            "87";
+            pressure_plot.remove();
+            "88";
+            x_axis_label = "No Var";
+            "90";
+            (await set_ui_enabled(true));
+        }
+    };
+    if (!begin_isolation.__module__) Object.defineProperties(begin_isolation, {
+        __module__ : {value: null}
+    });
+
+    "92";
+    async function findr(v) {
+        "93";
+        return pow(v["/"](2["*"](pi)), 1["/"](3));
+    };
+    if (!findr.__argnames__) Object.defineProperties(findr, {
+        __argnames__ : {value: ["v"]},
+        __module__ : {value: null}
+    });
+
+    "95";
+    async function updPiston(r) {
+        "96";
+        piston.pos = vec(0, 1["-u"]()["*"](1.5)["*"](r), 0);
+        "97";
+        piston.axis = vec(0, 2.5["*"](r), 0);
+        "98";
+        piston.radius = r;
+    };
+    if (!updPiston.__argnames__) Object.defineProperties(updPiston, {
+        __argnames__ : {value: ["r"]},
+        __module__ : {value: null}
+    });
+
+    "101";
+    async function setVolume() {
+        var ρσ_ls, oldVolume, r, object;
+        "102";
+        "103";
+        oldVolume = volume;
+        "104";
+        volume = volSlider.value;
+        "105";
+        displayvolume.text = volume;
+        "106";
+        r = (await findr(volume));
+        "107";
+        var ρσ_Iter6 = objects;
+        ρσ_Iter6 = ((typeof ρσ_Iter6[Symbol.iterator] === "function") ? (ρσ_Iter6 instanceof Map ? ρσ_Iter6.keys() : ρσ_Iter6) : Object.keys(ρσ_Iter6));
+        for (var ρσ_Index6 of ρσ_Iter6) {
+            object = ρσ_Index6;
+            "109";
+            object.pos=object.pos["*"](pow(volume["/"](oldVolume), 1["/"](3)));
+        }
+        "110";
+        (await updPiston(r));
+        "111";
+        gauge.pos=gauge.pos["*"](pow(volume["/"](oldVolume), 1["/"](3)));
+        "112";
+        gauge.size=gauge.size["*"](pow(volume["/"](oldVolume), 1["/"](3)));
+        "113";
+        lab.pos=lab.pos["*"](pow(volume["/"](oldVolume), 1["/"](3)));
+        "114";
+        scene.center = vec(0, 0, 0);
+        "115";
+        scene.range = (await findr(volume))["*"](2.5);
+    };
+    if (!setVolume.__module__) Object.defineProperties(setVolume, {
+        __module__ : {value: null}
+    });
+
+    "118";
+    async function setHeat() {
+        var ρσ_ls, newHeat, object, avgVelocty;
+        "119";
+        "120";
+        "122";
+        newHeat = heatSlider.value;
+        "123";
+        var ρσ_Iter7 = objects;
+        ρσ_Iter7 = ((typeof ρσ_Iter7[Symbol.iterator] === "function") ? (ρσ_Iter7 instanceof Map ? ρσ_Iter7.keys() : ρσ_Iter7) : Object.keys(ρσ_Iter7));
+        for (var ρσ_Index7 of ρσ_Iter7) {
+            object = ρσ_Index7;
+            "124";
+            object.vel=object.vel["*"](newHeat["/"](heat));
+        }
+        "126";
+        avgVelocty = newHeat;
+        "127";
+        heat = newHeat;
+    };
+    if (!setHeat.__module__) Object.defineProperties(setHeat, {
+        __module__ : {value: null}
+    });
+
+    "129";
+    objects = ρσ_list_decorate([]);
+    "131";
+    async function spawn_particle() {
+        var ρσ_ls, particle, max_diff, speed, i;
+        "132";
+        "134";
+        for (var ρσ_Index8 = 0; ρσ_Index8["<"](spawn_quantity); ρσ_Index8++) {
+            i = ρσ_Index8;
+            "135";
+            particle = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vec(0, 0, 0)})]);
+            "136";
+            max_diff = min(heat, .5);
+            "137";
+            speed = random.uniform(heat["-"](1["*"](max_diff)), heat["+"](max_diff));
+            "138";
+            particle.vel = vector.random()["/"](5)["*"](speed);
+            "139";
+            particle.mass = 1;
+            "140";
+            particle.color = color.blue;
+            "141";
+            particle.emissive = true;
+            "142";
+            particle.radius = .2;
+            "144";
+            objects.append(particle);
+            "145";
+            particle_count.text = len(objects);
+        }
+    };
+    if (!spawn_particle.__module__) Object.defineProperties(spawn_particle, {
+        __module__ : {value: null}
+    });
+
+    "147";
+    spawn_quantity = 1;
+    "149";
+    async function set_spawn_quantity() {
+        "150";
+        "152";
+        spawn_quantity = int(set_spawn_menu.selected);
+    };
+    if (!set_spawn_quantity.__module__) Object.defineProperties(set_spawn_quantity, {
+        __module__ : {value: null}
+    });
+
+    "154";
+    scene.append_to_caption("\n Particle Count:");
+    "155";
+    particle_count = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: len(objects)})]);
+    "156";
+    scene.append_to_caption("\n");
+    "158";
+    set_spawn_menu = ρσ_interpolate_kwargs.call(this, menu, [ρσ_desugar_kwargs({bind: set_spawn_quantity, choices: ρσ_list_decorate([ 1, 5, 10, 15, 20 ])})]);
+    "160";
+    spawn = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: spawn_particle, text: "Spawn particle"})]);
+    "161";
+    clear = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: clear_jar, text: "Clear"})]);
+    "164";
+    async function move(objects) {
+        var ρσ_ls, object;
+        "165";
+        var ρσ_Iter9 = objects;
+        ρσ_Iter9 = ((typeof ρσ_Iter9[Symbol.iterator] === "function") ? (ρσ_Iter9 instanceof Map ? ρσ_Iter9.keys() : ρσ_Iter9) : Object.keys(ρσ_Iter9));
+        for (var ρσ_Index9 of ρσ_Iter9) {
+            object = ρσ_Index9;
+            "166";
+            object.pos=object.pos["+"](object.vel);
+        }
+    };
+    if (!move.__argnames__) Object.defineProperties(move, {
+        __argnames__ : {value: ["objects"]},
+        __module__ : {value: null}
+    });
+
+    "168";
+    async function collision(objects) {
+        var ρσ_ls, obj2, obj1;
+        "169";
+        var ρσ_Iter10 = objects;
+        ρσ_Iter10 = ((typeof ρσ_Iter10[Symbol.iterator] === "function") ? (ρσ_Iter10 instanceof Map ? ρσ_Iter10.keys() : ρσ_Iter10) : Object.keys(ρσ_Iter10));
+        for (var ρσ_Index10 of ρσ_Iter10) {
+            obj1 = ρσ_Index10;
+            "170";
+            (await container_collision(obj1));
+            "171";
+            var ρσ_Iter11 = objects;
+            ρσ_Iter11 = ((typeof ρσ_Iter11[Symbol.iterator] === "function") ? (ρσ_Iter11 instanceof Map ? ρσ_Iter11.keys() : ρσ_Iter11) : Object.keys(ρσ_Iter11));
+            for (var ρσ_Index11 of ρσ_Iter11) {
+                obj2 = ρσ_Index11;
+                "172";
+                if ((obj1 !== obj2 && (typeof obj1 !== "object" || ρσ_not_equals(obj1, obj2)))) {
+                    "173";
+                    (await sphere_sphere_collision(obj1, obj2));
+                }
+            }
+        }
+    };
+    if (!collision.__argnames__) Object.defineProperties(collision, {
+        __argnames__ : {value: ["objects"]},
+        __module__ : {value: null}
+    });
+
+    "175";
+    async function sphere_sphere_collision(s1, s2) {
+        var ρσ_ls, dist, n, v_rel, vel_along_normal, m1, m2, impulse;
+        "176";
+        dist = mag(s1.pos["-"](1["*"](s2.pos)));
+        "178";
+        if (dist["<"](s1.radius["+"](s2.radius))) {
+            "180";
+            n = norm(s1.pos["-"](1["*"](s2.pos)));
+            "182";
+            v_rel = s1.vel["-"](1["*"](s2.vel));
+            "183";
+            vel_along_normal = dot(v_rel, n);
+            "185";
+            if (vel_along_normal[">"](0)) {
+                "186";
+                return;
+            }
+            "188";
+            m1 = s1.mass;
+            "189";
+            m2 = s2.mass;
+            "191";
+            impulse = 2["*"](vel_along_normal)["/"](m1["+"](m2));
+            "193";
+            s1.vel = s1.vel["-"](1["*"](impulse)["*"](m2)["*"](n));
+            "194";
+            s2.vel = s2.vel["+"](impulse["*"](m1)["*"](n));
+        }
+    };
+    if (!sphere_sphere_collision.__argnames__) Object.defineProperties(sphere_sphere_collision, {
+        __argnames__ : {value: ["s1", "s2"]},
+        __module__ : {value: null}
+    });
+
+    "196";
+    async function container_collision(obj) {
+        var ρσ_ls, dx, dz, dist_squared, boundary, normal_vec, dot_vec, dist, overlap;
+        "197";
+        "200";
+        dx = obj.pos.x["-"](1["*"](piston.pos.x));
+        "201";
+        dz = obj.pos.z["-"](1["*"](piston.pos.z));
+        "204";
+        dist_squared = dx["*"](dx)["+"](dz["*"](dz));
+        "205";
+        boundary = Math.pow((piston.radius["-"](1["*"](obj.radius))["-"](1["*"](.2))), 2);
+        "207";
+        if (dist_squared[">"](boundary)) {
+            "209";
+            normal_vec = norm(vec(dx, 0, dz));
+            "211";
+            dot_vec = dot(obj.vel, normal_vec);
+            "213";
+            obj.vel.x = obj.vel.x["-"](1["*"](2)["*"](dot_vec)["*"](normal_vec.x));
+            "214";
+            obj.vel.z = obj.vel.z["-"](1["*"](2)["*"](dot_vec)["*"](normal_vec.z));
+            "216";
+            dist = sqrt(dist_squared);
+            "217";
+            overlap = dist["-"](1["*"](piston.radius["-"](1["*"](obj.radius))["-"](1["*"](.2))));
+            "218";
+            obj.pos.x=obj.pos.x["-"](normal_vec.x["*"](overlap));
+            "219";
+            obj.pos.z=obj.pos.z["-"](normal_vec.z["*"](overlap));
+            "221";
+            collisioncount=collisioncount["+"](1);
+            "225";
+        }
+        if (obj.vel.y[">"](0) && obj.pos.y[">"](piston.pos.y["+"](piston.radius["*"](2.5))["-"](1["*"](obj.radius))["-"](1["*"](.15)))) {
+            "226";
+            obj.vel.y=obj.vel.y["*"](1["-u"]()["*"](1));
+            "227";
+            collisioncount=collisioncount["+"](1);
+            "229";
+        }
+        if (obj.vel.y["<"](0) && obj.pos.y["<"](piston.pos.y["+"](obj.radius)["+"](.15))) {
+            "230";
+            obj.vel.y=obj.vel.y["*"](1["-u"]()["*"](1));
+            "231";
+            collisioncount=collisioncount["+"](1);
+        }
+    };
+    if (!container_collision.__argnames__) Object.defineProperties(container_collision, {
+        __argnames__ : {value: ["obj"]},
+        __module__ : {value: null}
+    });
+
+    "233";
+    async function clear() {
+        var ρσ_ls, object;
+        "234";
+        "235";
+        "237";
+        var ρσ_Iter12 = objects;
+        ρσ_Iter12 = ((typeof ρσ_Iter12[Symbol.iterator] === "function") ? (ρσ_Iter12 instanceof Map ? ρσ_Iter12.keys() : ρσ_Iter12) : Object.keys(ρσ_Iter12));
+        for (var ρσ_Index12 of ρσ_Iter12) {
+            object = ρσ_Index12;
+            "238";
+            object.visible = false;
+        }
+        "239";
+        objects = ρσ_list_decorate([]);
+        "240";
+        particle_count.text = 0;
+        "241";
+        collisioncount = 0;
+    };
+    if (!clear.__module__) Object.defineProperties(clear, {
+        __module__ : {value: null}
+    });
+
+    "243";
+    async function clear_jar() {
+        var ρσ_ls, object;
+        "244";
+        "245";
+        "247";
+        var ρσ_Iter13 = objects;
+        ρσ_Iter13 = ((typeof ρσ_Iter13[Symbol.iterator] === "function") ? (ρσ_Iter13 instanceof Map ? ρσ_Iter13.keys() : ρσ_Iter13) : Object.keys(ρσ_Iter13));
+        for (var ρσ_Index13 of ρσ_Iter13) {
+            object = ρσ_Index13;
+            "248";
+            object.visible = false;
+        }
+        "249";
+        objects = ρσ_list_decorate([]);
+        "250";
+        particle_count.text = 0;
+        "251";
+        collisioncount = 0;
+    };
+    if (!clear_jar.__module__) Object.defineProperties(clear_jar, {
+        __module__ : {value: null}
+    });
+
+    "253";
+    gauge = ρσ_list_decorate([]);
+    "254";
+    needle = null;
+    "255";
+    async function draw_gauge(init_pos) {
+        var ρσ_ls, backing;
+        "256";
+        "257";
+        "259";
+        backing = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: init_pos["+"](vec(0, 0, 0)), axis: vec(0, 0, 1), length: .05, radius: 4, emissive: true})]);
+        "260";
+        needle = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: init_pos, axis: vec(1["-u"]()["*"](1), 0, 0), length: 3, radius: .1, color: color.red, emissive: true})]);
+        "262";
+        gauge = ρσ_interpolate_kwargs.call(this, compound, [ρσ_list_decorate([ backing, needle ])].concat([ρσ_desugar_kwargs({pos: init_pos})]));
+        "263";
+        scene.center = vec(0, 0, 0);
+        "264";
+        scene.range = (await findr(volume))["*"](2.5);
+    };
+    if (!draw_gauge.__argnames__) Object.defineProperties(draw_gauge, {
+        __argnames__ : {value: ["init_pos"]},
+        __module__ : {value: null}
+    });
+
+    "269";
+    (await draw_gauge(vec(10, 0, 0)));
+    "273";
+    pressure = 0;
+    "274";
+    lab = ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: vec(10, 0, 0), text: "Pressure: "["+"](pressure), xoffset: 20, yoffset: 80, space: 0, height: 16, border: 4, font: "sans", background: vec(0, 0, 0), box: false})]);
+    "276";
+    isolation_mode = "None";
+    "277";
+    isolation_index = 0;
+    "278";
+    isolation_values = ρσ_list_decorate([]);
+    "279";
+    async function set_ui_enabled(state) {
+        "280";
+        volSlider.disabled = !state;
+        "281";
+        heatSlider.disabled = !state;
+        "282";
+        spawn.disabled = !state;
+        "283";
+        clear.disabled = !state;
+        "284";
+        set_spawn_menu.disabled = !state;
+    };
+    if (!set_ui_enabled.__argnames__) Object.defineProperties(set_ui_enabled, {
+        __argnames__ : {value: ["state"]},
+        __module__ : {value: null}
+    });
+
+    "285";
+    async function begin_isolation() {
+        var ρσ_ls, x;
+        "286";
+        "287";
+        isolation_mode = isolation_menu.selected;
+        "288";
+        isolation_index = 0;
+        "289";
+        pressure_plot.remove();
+        "290";
+        (await set_ui_enabled(false));
+        "292";
+        if ((isolation_mode === "Isolate Volume" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Volume"))) {
+            "293";
+            isolation_values = list(range(1e3, 10001, 250));
+            "294";
+        } else if ((isolation_mode === "Isolate Temperature" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Temperature"))) {
+            "295";
+            isolation_values = (function() {
+                var ρσ_Iter = range(5, 61, 2), ρσ_Result = [], x;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    x = ρσ_Index;
+                    ρσ_Result.push(round(x["*"](.1), 1));
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })();
+            "296";
+        } else if ((isolation_mode === "Isolate Particles" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Particles"))) {
+            "297";
+            isolation_values = list(range(1, 200, 10));
+            "298";
+        } else {
+            "299";
+            (await set_ui_enabled(true));
+        }
+    };
+    if (!begin_isolation.__module__) Object.defineProperties(begin_isolation, {
+        __module__ : {value: null}
+    });
+
+    "300";
+    async function apply_isolation_step() {
+        var ρσ_ls, value, old_volume, r, o, obj;
+        "301";
+        "302";
+        value = ρσ_getitem(isolation_values, isolation_index);
+        "304";
+        if ((isolation_mode === "Isolate Volume" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Volume"))) {
+            "305";
+            data_plot.xtitle = "Volume";
+            "306";
+            old_volume = volume;
+            "307";
+            volume = value;
+            "308";
+            volSlider.value = value;
+            "309";
+            r = (await findr(volume));
+            "310";
+            (await updPiston(r));
+            "311";
+            var ρσ_Iter14 = objects;
+            ρσ_Iter14 = ((typeof ρσ_Iter14[Symbol.iterator] === "function") ? (ρσ_Iter14 instanceof Map ? ρσ_Iter14.keys() : ρσ_Iter14) : Object.keys(ρσ_Iter14));
+            for (var ρσ_Index14 of ρσ_Iter14) {
+                o = ρσ_Index14;
+                "312";
+                o.pos=o.pos["*"](pow(volume["/"](old_volume), 1["/"](3)));
+            }
+            "313";
+            gauge.pos=gauge.pos["*"](pow(volume["/"](old_volume), 1["/"](3)));
+            "314";
+            gauge.size=gauge.size["*"](pow(volume["/"](old_volume), 1["/"](3)));
+            "315";
+            lab.pos.x=lab.pos.x["*"](pow(volume["/"](old_volume), 1["/"](3)));
+            "316";
+            displayvolume.text = volume;
+            "318";
+        } else if ((isolation_mode === "Isolate Temperature" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Temperature"))) {
+            "319";
+            data_plot.xtitle = "Temperature";
+            "320";
+            var ρσ_Iter15 = objects;
+            ρσ_Iter15 = ((typeof ρσ_Iter15[Symbol.iterator] === "function") ? (ρσ_Iter15 instanceof Map ? ρσ_Iter15.keys() : ρσ_Iter15) : Object.keys(ρσ_Iter15));
+            for (var ρσ_Index15 of ρσ_Iter15) {
+                obj = ρσ_Index15;
+                "321";
+                obj.vel=obj.vel["*"](value["/"](heat));
+            }
+            "322";
+            heatSlider.value = value;
+            "323";
+            heat = value;
+            "325";
+        } else if ((isolation_mode === "Isolate Particles" || typeof isolation_mode === "object" && ρσ_equals(isolation_mode, "Isolate Particles"))) {
+            "326";
+            data_plot.xtitle = "Particles";
+            "327";
+            (await clear_jar());
+            "328";
+            spawn_quantity = value;
+            "329";
+            (await spawn_particle());
+        }
+    };
+    if (!apply_isolation_step.__module__) Object.defineProperties(apply_isolation_step, {
+        __module__ : {value: null}
+    });
+
+    "331";
+    async function wait_for_pressure_step() {
+        var ρσ_ls, t, interval, raw;
+        "332";
+        "333";
+        timer = 0;
+        "334";
+        smoothed_pressure = null;
+        "335";
+        t = 0;
+        "336";
+        interval = raw_pressure_interval;
+        "337";
+        while (t["<"](1)) {
+            "338";
+            (await rate(1["/"](dt)));
+            "339";
+            (await move(objects));
+            "340";
+            (await collision(objects));
+            "341";
+            raw = collisioncount["/"](interval["*"](volume));
+            "342";
+            if (smoothed_pressure === null) {
+                "343";
+                smoothed_pressure = raw;
+            }
+            "344";
+            smoothed_pressure = alpha["*"](raw)["+"](1["-"](1["*"](alpha))["*"](smoothed_pressure));
+            "345";
+            collisioncount = 0;
+            "346";
+            t=t["+"](interval);
+        }
+        "347";
+        return smoothed_pressure;
+    };
+    if (!wait_for_pressure_step.__module__) Object.defineProperties(wait_for_pressure_step, {
+        __module__ : {value: null}
+    });
+
+    "350";
+    for (var ρσ_Index16 = 1["-u"]()["*"](1e3); ρσ_Index16["<"](1001); ρσ_Index16=ρσ_Index16["+"](10)) {
+        i = ρσ_Index16;
+        "352";
+        ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ vec(i, 1["-u"]()["*"](20), 1["-u"]()["*"](1e3)), vec(i, 1["-u"]()["*"](20), 1e3) ]), color: color.gray(.7)})]);
+        "354";
+        ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ vec(1["-u"]()["*"](1e3), 1["-u"]()["*"](20), i), vec(1e3, 1["-u"]()["*"](20), i) ]), color: color.gray(.7)})]);
+    }
+    "359";
+    timer = 0;
+    "360";
+    dt = .01;
+    "361";
+    raw_pressure_interval = .01;
+    "362";
+    smoothed_pressure = null;
+    "363";
+    alpha = .05;
+    "364";
+    while (true) {
+        "365";
+        (await rate(1["/"](dt)));
+        "366";
+        "367";
+        (await move(objects));
+        "368";
+        (await collision(objects));
+        "371";
+        timer=timer["+"](dt);
+        "373";
+        if (timer[">"](raw_pressure_interval)) {
+            "374";
+            timer = 0;
+            "375";
+            raw_pressure = collisioncount["/"](raw_pressure_interval["*"](volume));
+            "377";
+            if (!(smoothed_pressure)) {
+                "378";
+                smoothed_pressure = raw_pressure;
+            }
+            "379";
+            smoothed_pressure = alpha["*"](raw_pressure)["+"](1["-"](1["*"](alpha))["*"](smoothed_pressure));
+            "381";
+            collisioncount = 0;
+            "383";
+            lab.text = "Pressure: "["+"](round(smoothed_pressure, 2));
+            "386";
+        }
+        if (smoothed_pressure) {
+            "387";
+            gauge.axis.x = cos(smoothed_pressure["/"](6)["*"](pi))["*"](3);
+            "388";
+            gauge.axis.y = sin(smoothed_pressure["/"](6)["*"](pi))["*"](1["-u"]())["*"](3);
+            "390";
+        }
+        if ((isolation_menu.selected !== isolation_mode && (typeof isolation_menu.selected !== "object" || ρσ_not_equals(isolation_menu.selected, isolation_mode))) && (isolation_menu.selected !== "None" && (typeof isolation_menu.selected !== "object" || ρσ_not_equals(isolation_menu.selected, "None")))) {
+            "391";
+            (await begin_isolation());
+            "393";
+        }
+        if ((isolation_mode !== "None" && (typeof isolation_mode !== "object" || ρσ_not_equals(isolation_mode, "None")))) {
+            "394";
+            if (isolation_index["<"](len(isolation_values))) {
+                "395";
+                (await apply_isolation_step());
+                "396";
+                pres = (await wait_for_pressure_step());
+                "397";
+                pressure_plot.plot(ρσ_getitem(isolation_values, isolation_index), pres);
+                "398";
+                data_plot.xtitle = x_axis_label;
+                "399";
+                isolation_index=isolation_index["+"](1);
+            }
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

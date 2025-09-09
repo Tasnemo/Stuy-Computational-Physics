@@ -1,0 +1,270 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var sun;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, G, planets, sun, earth, venus, mars, t, dt, plan, comparison, planetsP, Xvals, Yvals, planny, fitty, numerator, denominator, i, m, p, _;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    scene = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({width: 600, height: 600})]);
+    "5";
+    G = 6.67e-11;
+    "6";
+    planets = ρσ_list_decorate([]);
+    "7";
+    sun = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(0, 0, 0), radius: 12e9, texture: "https://i.imgur.com/XdRTvzj.jpeg", shininess: 0, emissive: true, make_trail: true})]);
+    "8";
+    earth = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({name: "Earth", pos: vector(1496e8, 0, 0), init_pos: vector(15e10, 0, 0), radius: 637e7, prev_pos: vector(0, 0, 0), texture: textures.earth, make_trail: true, retain: 30, angle: 0, orbitF: false, smaF: false, sma: 0, orbit: 0, period: 0})]);
+    "9";
+    venus = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({name: "Venus", pos: vector(1082e8, 0, 0), init_pos: vector(.723["*"](earth.pos.x), 0, 0), prev_pos: vector(0, 0, 0), radius: earth.radius["*"](.9499293674), texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Solarsystemscope_texture_8k_venus_surface.jpg/2560px-Solarsystemscope_texture_8k_venus_surface.jpg", make_trail: true, retain: 30, angle: 0, orbitF: false, smaF: false, orbit: 0, sma: 0, period: 0})]);
+    "10";
+    mars = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({name: "Mars", pos: vector(228e9, 0, 0), init_pos: vector(1.5["*"](earth.pos.x), 0, 0), radius: earth.radius["*"](.8), texture: "https://upload.wikimedia.org/wikipedia/commons/7/70/Solarsystemscope_texture_8k_mars.jpg", make_trail: true, retain: 30, angle: 0, orbitF: false, smaF: false, orbit: 0, sma: 0, period: 0})]);
+    "16";
+    sun.mass = 1.9891e30;
+    "17";
+    earth.mass = 5.97e24;
+    "18";
+    mars.mass = earth.mass["*"](.107);
+    "19";
+    venus.mass = earth.mass["*"](.815);
+    "21";
+    sun.velocity = vector(0, 0, 0);
+    "22";
+    earth.velocity = vector(0, 29800, 0);
+    "23";
+    mars.velocity = vector(0, 24100, 0);
+    "24";
+    venus.velocity = vector(0, 35e3, 0);
+    "26";
+    sun.acc = vector(0, 0, 0);
+    "27";
+    earth.acc = vector(0, 0, 0);
+    "28";
+    mars.acc = vector(0, 0, 0);
+    "29";
+    venus.acc = vector(0, 0, 0);
+    "31";
+    planets.append(earth);
+    "32";
+    planets.append(mars);
+    "33";
+    planets.append(venus);
+    "36";
+    async function gravity(star, satellite) {
+        var ρσ_ls, dist, F;
+        "37";
+        dist = star.pos["-"](1["*"](satellite.pos));
+        "39";
+        F = G["*"](star.mass)["*"](satellite.mass)["/"](Math.pow(mag(dist), 2));
+        "40";
+        return F["*"](hat(dist));
+    };
+    if (!gravity.__argnames__) Object.defineProperties(gravity, {
+        __argnames__ : {value: ["star", "satellite"]},
+        __module__ : {value: null}
+    });
+
+    "42";
+    async function angGrab(planet) {
+        var ρσ_ls, delta_theta;
+        "43";
+        delta_theta = diff_angle(planet.pos["-"](1["*"](sun.pos)), planet.prev_pos["-"](1["*"](sun.pos)));
+        "44";
+        planet.angle=planet.angle["+"](delta_theta);
+    };
+    if (!angGrab.__argnames__) Object.defineProperties(angGrab, {
+        __argnames__ : {value: ["planet"]},
+        __module__ : {value: null}
+    });
+
+    "48";
+    async function grav(satty) {
+        "49";
+        "51";
+        sun.acc = (await gravity(satty, sun))["/"](sun.mass);
+        "52";
+        satty.acc = (await gravity(sun, satty))["/"](satty.mass);
+        "54";
+        satty.velocity = satty.velocity["+"](satty.acc["*"](dt));
+        "55";
+        sun.velocity = sun.velocity["+"](sun.acc["*"](dt));
+        "57";
+        satty.prev_pos = satty.pos;
+        "58";
+        satty.pos = satty.pos["+"](satty.velocity["*"](dt));
+        "59";
+        sun.pos = sun.pos["+"](sun.velocity["*"](dt));
+    };
+    if (!grav.__argnames__) Object.defineProperties(grav, {
+        __argnames__ : {value: ["satty"]},
+        __module__ : {value: null}
+    });
+
+    "65";
+    t = 0;
+    dt = 3600;
+    "67";
+    while (!(mars.orbitF)) {
+        "68";
+        (await rate(1e3));
+        "71";
+        var ρσ_Iter1 = planets;
+        ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+        for (var ρσ_Index1 of ρσ_Iter1) {
+            plan = ρσ_Index1;
+            "72";
+            (await grav(plan));
+            "73";
+            (await angGrab(plan));
+            "75";
+            if (!plan.orbitF && plan.angle[">="](2["*"](pi))) {
+                "76";
+                print(plan.name["+"](" period: ")["+"](str(t["/"](3600)["/"](24))));
+                "77";
+                plan.periodo = t["/"](3600)["/"](24);
+                "78";
+                plan.orbitF = true;
+                "80";
+            }
+            if (!plan.smaF && plan.angle[">="](pi)) {
+                "81";
+                print(plan.name["+"](" Semi Major Axis: "));
+                "82";
+                print(mag(plan.pos["-"](1["*"](sun.pos)))["+"](mag(plan.init_pos["-"](1["*"](sun.pos)))));
+                "83";
+                plan.smaF = true;
+                "84";
+                plan.sma = mag(plan.pos["-"](1["*"](sun.pos)))["+"](mag(plan.init_pos["-"](1["*"](sun.pos))));
+            }
+        }
+        "87";
+        t = t["+"](dt);
+    }
+    "89";
+    comparison = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "a^3 va t^2", xtitle: "semi major axis(km)", ytitle: "orbital period(days)"})]);
+    "91";
+    planetsP = ρσ_interpolate_kwargs.call(this, gdots, [ρσ_desugar_kwargs({graph: comparison, color: color.red})]);
+    "94";
+    Xvals = ρσ_list_decorate([]);
+    "95";
+    Yvals = ρσ_list_decorate([]);
+    "97";
+    var ρσ_Iter2 = planets;
+    ρσ_Iter2 = ((typeof ρσ_Iter2[Symbol.iterator] === "function") ? (ρσ_Iter2 instanceof Map ? ρσ_Iter2.keys() : ρσ_Iter2) : Object.keys(ρσ_Iter2));
+    for (var ρσ_Index2 of ρσ_Iter2) {
+        planny = ρσ_Index2;
+        "98";
+        planetsP.plot(Math.pow(planny.sma, 3), Math.pow(planny.periodo, 2));
+        "99";
+        Xvals.append(Math.pow(planny.sma, 3));
+        "100";
+        Yvals.append(Math.pow(planny.periodo, 2));
+    }
+    "103";
+    fitty = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: comparison, color: color.black})]);
+    "104";
+    numerator = 0;
+    "105";
+    denominator = 0;
+    "106";
+    var ρσ_Iter3 = range(len(Xvals));
+    ρσ_Iter3 = ((typeof ρσ_Iter3[Symbol.iterator] === "function") ? (ρσ_Iter3 instanceof Map ? ρσ_Iter3.keys() : ρσ_Iter3) : Object.keys(ρσ_Iter3));
+    for (var ρσ_Index3 of ρσ_Iter3) {
+        i = ρσ_Index3;
+        "107";
+        numerator=numerator["+"](ρσ_getitem(Xvals, i)["*"](ρσ_getitem(Yvals, i)));
+        "108";
+        denominator=denominator["+"](Math.pow(ρσ_getitem(Xvals, i), 2));
+    }
+    "110";
+    m = numerator["/"](denominator);
+    "111";
+    print("Best-fit slope (T^2 / a^3): "["+"](str(m)));
+    "115";
+    var ρσ_Iter4 = range(0, max(Xvals)["*"](1.1), max(Xvals)["/"](20));
+    ρσ_Iter4 = ((typeof ρσ_Iter4[Symbol.iterator] === "function") ? (ρσ_Iter4 instanceof Map ? ρσ_Iter4.keys() : ρσ_Iter4) : Object.keys(ρσ_Iter4));
+    for (var ρσ_Index4 of ρσ_Iter4) {
+        p = ρσ_Index4;
+        "116";
+        fitty.plot(p, p["*"](m));
+    }
+    "118";
+    var ρσ_Iter5 = planets;
+    ρσ_Iter5 = ((typeof ρσ_Iter5[Symbol.iterator] === "function") ? (ρσ_Iter5 instanceof Map ? ρσ_Iter5.keys() : ρσ_Iter5) : Object.keys(ρσ_Iter5));
+    for (var ρσ_Index5 of ρσ_Iter5) {
+        _ = ρσ_Index5;
+        "119";
+        print(_.name);
+        "120";
+        print("   Semi Major Axis:"["+"](str(_.sma))["+"]("(km)"));
+        "121";
+        print("   Period of Orbit:"["+"](str(_.periodo))["+"]("(days)"));
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

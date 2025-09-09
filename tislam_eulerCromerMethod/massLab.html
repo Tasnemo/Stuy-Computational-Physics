@@ -1,0 +1,226 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var running, count, cycles, starter, periodPlotted, goingRight;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, wall, ball, spring, graphPeriod, periodCurve, running, dt, count, cycles, starter, periodPlotted, goingRight, time, dist, Changer, countdownText;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "4";
+    scene.userzoom = false;
+    "5";
+    wall = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](3), 0, 0), height: 3, length: .1, texture: textures.wood})]);
+    "6";
+    ball = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](.5), 0, 0), radius: .3, color: color.yellow})]);
+    "7";
+    spring = ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: wall.pos, axis: ball.pos["-"](1["*"](wall.pos)), coils: 19, radius: .15, thickness: .02})]);
+    "10";
+    graphPeriod = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Mass vs Period", xtitle: "Mass (kg)", ytitle: "Period (s)", xmin: 0, ymin: 0, ymax: 2})]);
+    "12";
+    periodCurve = ρσ_interpolate_kwargs.call(this, gdots, [ρσ_desugar_kwargs({graph: graphPeriod, color: color.blue})]);
+    "16";
+    ball.vel = vector(0, 0, 0);
+    "17";
+    ball.acc = vector(0, 0, 0);
+    "18";
+    ball.mass = 10;
+    "19";
+    spring.k = 200;
+    "22";
+    running = false;
+    "23";
+    dt = .01;
+    "24";
+    count = 0;
+    "25";
+    cycles = 0;
+    "26";
+    starter = false;
+    "27";
+    periodPlotted = false;
+    "28";
+    goingRight = true;
+    "29";
+    time = 0;
+    "32";
+    async function toggle_button() {
+        "33";
+        "35";
+        running = !running;
+        "37";
+        if (running) {
+            "38";
+            count = 0;
+            "39";
+            cycles = 0;
+            "40";
+            starter = false;
+            "41";
+            periodPlotted = false;
+            "42";
+            goingRight = true;
+            "43";
+            Changer.disabled = true;
+            "44";
+            countdownText.text = "Cycles till plot: 10";
+            "45";
+        } else {
+            "46";
+            Changer.disabled = false;
+        }
+    };
+    if (!toggle_button.__module__) Object.defineProperties(toggle_button, {
+        __module__ : {value: null}
+    });
+
+    "48";
+    ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({text: "Start/Stop", bind: toggle_button})]);
+    "50";
+    ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Mass (kg): "})]);
+    "52";
+    dist = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: ball.mass})]);
+    "54";
+    async function myaction(slider) {
+        "55";
+        "56";
+        ball.mass = slider.value;
+        "57";
+        ball.radius = .2["+"](5e-4["*"](ball.mass));
+        "58";
+        periodPlotted = false;
+        "59";
+        ball.pos.x = 2;
+        "60";
+        ball.vel = vector(0, 0, 0);
+    };
+    if (!myaction.__argnames__) Object.defineProperties(myaction, {
+        __argnames__ : {value: ["slider"]},
+        __module__ : {value: null}
+    });
+
+    "62";
+    Changer = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: myaction, min: 1, max: 50, value: 10})]);
+    "65";
+    countdownText = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: " Cycles till plot: 10"})]);
+    "68";
+    while (true) {
+        "69";
+        (await rate(100));
+        "71";
+        dist.text = ball.mass;
+        "72";
+        spring.axis = ball.pos["-"](1["*"](wall.pos));
+        "73";
+        if (running) {
+            "74";
+            time=time["+"](dt);
+            "75";
+            ball.acc.x = 1["-u"]()["*"](spring.k)["/"](ball.mass)["*"](ball.pos.x);
+            "76";
+            ball.vel.x=ball.vel.x["+"](ball.acc.x["*"](dt));
+            "77";
+            ball.pos.x=ball.pos.x["+"](ball.vel.x["*"](dt));
+            "80";
+            if (starter) {
+                "81";
+                count=count["+"](dt);
+                "84";
+            }
+            if (goingRight && ball.vel.x["<"](0)) {
+                "85";
+                cycles=cycles["+"](1);
+                "86";
+                goingRight = false;
+                "87";
+                if (!starter) {
+                    "88";
+                    starter = true;
+                    "91";
+                }
+                if (cycles["<="](10)) {
+                    "92";
+                    countdownText.text = "  Cycles till plot: "["+"](ρσ_str.format("{}", 10["-"](cycles)))["+"]("");
+                    "95";
+                }
+            } else if (!goingRight && ball.vel.x[">"](0)) {
+                "96";
+                goingRight = true;
+                "99";
+            }
+            if ((cycles === 10 || typeof cycles === "object" && ρσ_equals(cycles, 10)) && !periodPlotted) {
+                "100";
+                periodCurve.plot(ball.mass, count["/"](10));
+                "101";
+                periodPlotted = true;
+                "102";
+                countdownText.text = "  Plotted!";
+            }
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
